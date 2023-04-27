@@ -19,10 +19,16 @@ let lastNameForm = document.getElementById("last");
 let emailForm = document.getElementById("email");
 const loginForm = document.querySelector(".formData");
 let quantityForm = document.getElementById("quantity");
+
 // Définition de l'expression régulière pour l'email
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const radioButtons = document.querySelector(".checkbox-input");
 const conditionsCheckbox = document.querySelector(".checkbox2-label")
+
+// ajout validation ou messages d'erreur
+const borderBox = document.querySelector(".text-control")
+
+
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -55,18 +61,24 @@ loginForm.addEventListener('submit', (event)=> {
 
 
 // sert à valider le prénom
+const minLength = 2;
+
 function validateFirstName (firstNameForm) {
   if (firstNameForm.length < 2) {
     alert('Erreur : nombre de caractères inférieur à 2');
     console.log ('erreur');
   }
   else {
-    alert('je valide');
     console.log('bien joué');
 
     
   }
 }
+
+firstNameForm.addEventListener('input', validateFirstName)
+
+
+
 
 // sert à valider le nom de famille
 function validateLastName (lastNameForm) {
@@ -79,7 +91,6 @@ function validateLastName (lastNameForm) {
     console.log('bravissimo');
   }
 }
-
 
 
 // Vérification de la validité de l'email
@@ -133,3 +144,15 @@ function isConditionsChecked (conditionsCheckbox){
 loginForm.onsubmit = () => {
 
 }
+
+//définition de l'ajout de messages de validation ou d'erreur
+borderBox.addEventListener("input", function() {
+  borderBox.style.borderColor = "green";
+  errorMessage.style.display = "none";
+});
+
+borderBox.addEventListener("invalid", function() {
+  borderBox.style.borderColor = "solid red 1px";
+  errorMessage.style.display = "block";
+  borderBox.innerText = "lopum ispum je sais plus";
+});
