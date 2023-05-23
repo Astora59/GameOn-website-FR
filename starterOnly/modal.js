@@ -14,16 +14,16 @@ const formData = document.querySelectorAll(".formData");
 const closeModal = document.querySelector(".close");
 
 //form elements
-let firstNameForm = document.getElementById("first");
-let lastNameForm = document.getElementById("last");
-let emailForm = document.getElementById("email");
-const loginForm = document.querySelector(".formData");
-let quantityForm = document.getElementById("quantity");
+const loginForm = document.querySelector(".form");
+//let quantityForm = document.getElementById("quantity");
 
 // Définition de l'expression régulière pour l'email
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const radioButtons = document.querySelector(".checkbox-input");
+const emailRegex = /^[a-z0-9-_]+@[a-z]+\.[a-z]+$/;
+//const location = document.querySelector(".checkbox-input");
 const conditionsCheckbox = document.querySelector(".checkbox2-label")
+
+//définition regex pour nom et prénom
+const regexLettres = /^[a-zA-Z]+$/; // Expression régulière pour n'accepter que des lettres
 
 // ajout validation ou messages d'erreur
 const borderBox = document.querySelector(".text-control")
@@ -52,107 +52,216 @@ function closeModalWindow() {
   modalbg.style.display = "none";
 }
 
-
-//prevent submit event
+ 
+//prevent submit event & name validator
 loginForm.addEventListener('submit', (event)=> {
   event.preventDefault(); //empêche l'envoi du formulaire par défaut
-  console.log("le formulaire n'a pas été envoyé")
-});
-
-
-// sert à valider le prénom
-const minLength = 2;
-
-function validateFirstName (firstNameForm) {
-  if (firstNameForm.length < 2) {
-    alert('Erreur : nombre de caractères inférieur à 2');
-    console.log ('erreur');
-  }
-  else {
-    console.log('bien joué');
-
+  console.log(event.target.elements);
+  const {first, last, email, quantity, birthdate, location, checkbox1} = event.target.elements; // permet de sélectionner tous les éléments qui concernent firstname et lastname, aucun autre, c'est la destructuration
+  const errorOnFirstnameAlreadyExist = document.querySelector("#first_error"); // va permettre la non répétition du texte d'erreur
+  let hasErrorOnForm = false; // condition générale qui permet que le formulaire ne s'envoie pas s'il y a un true quelque part
+  if (!lengthValidator(first.value, 2)) { // "si la fonction lengthvalidator n'est pas true (donc si firstnameForm plus petit que 2)"
+    hasErrorOnForm = true; 
+    first.classList.add('text-control--red'); //ajoute la classe text-control--red à la balise, sans l'utilisation de style inline 
+    //formData.insertAfter (pElement);
+    if (!errorOnFirstnameAlreadyExist) { //s'il y a une erreur et pas encore de message d'erreur
+      const errorMessage = createErrorElement(first.id, "Veuillez entrer 2 caractères ou plus pour le champ du prénom"); //création du message d'erreur
+      const containerInputFirstname = document.querySelector("#first"); //on déclare là où sera le message d'erreur
+      containerInputFirstname.parentElement.appendChild(errorMessage);
+    }
     
   }
-}
+  else { //s'il n'y a aucune erreur
+   if(errorOnFirstnameAlreadyExist) { //s'il y a déjà ou pas de message d'erreur...
+    errorOnFirstnameAlreadyExist.remove(); //alors on retire et on s'arrête là
+   }
+   first.classList.remove('text-control--red'); //on enlève le style cadre rouge d'indication d'erreur
+  }
 
-firstNameForm.addEventListener('input', validateFirstName)
+  
 
 
+  const errorOnLastNameAlreadyExist = document.querySelector('#last_error');
 
-
-// sert à valider le nom de famille
-function validateLastName (lastNameForm) {
-  if (lastNameForm.length < 2) {
-    alert('erreur : nombre de caractères inférieur à 2');
-    console.log('erreur');
+  if (!lengthValidator(last.value, 2)) {
+    hasErrorOnForm = true; 
+    last.classList.add('text-control--red');
+    if (!errorOnLastNameAlreadyExist) {
+      const errorMessage = createErrorElement(last.id, "Veuillez entrer 2 caractères ou plus pour le champ du nom");
+      const containerInputLastname = document.querySelector("#last");
+      containerInputLastname.parentElement.appendChild(errorMessage);
+    }
   }
   else {
-    alert('validé par la rue');
-    console.log('bravissimo');
+    if(errorOnLastNameAlreadyExist) {
+      errorOnLastNameAlreadyExist.remove();
+    }
+    
+    last.classList.remove('text-control--red');
   }
-}
 
 
-// Vérification de la validité de l'email
-function validateEmail (email) {
-if (!emailRegex.test(email)) {
-  // Si l'email n'est pas valide, affichage d'un message d'erreur
-  alert("L'email saisi n'est pas valide");
-}
 
-else {
-  alert('validé');
-  console.log('parfait !')
-}
-}
+  const errorOnEmailAlreadyexist = document.querySelector('#email_error');
+    if (!emailRegex.test(email.value)) {
+      
+      // Si l'email n'est pas valide, affichage d'un message d'erreur
+      hasErrorOnForm = true;
+      email.classList.add('text-control--red');
+     if (!errorOnEmailAlreadyexist) {
+      const errorMessage = createErrorElement(email.id, "L'adresse email est invalide"); //création du message d'erreur
+      const containerInputEmail = document.querySelector("#email"); //on déclare là où sera le message d'erreur
+      containerInputEmail.parentElement.appendChild(errorMessage);
+     }
+    }
+    
+    else {
+      if(errorOnEmailAlreadyexist) {
+        errorOnEmailAlreadyexist.remove();
+      }
+       
+      email.classList.remove('text-control--red');
+    }
+    
 
 
-//vérification de la saisie d'une valeur numérique
-function validateQuantity (quantity) {
-if (isNaN(quantityForm)) {
-  alert('La valeur entrée ne correspond pas à un nombre');
-}
 
-else {
-  console.log('la valeur renvoyée est bien un nombre');
-}
-}
+    const errorOnQuantityAlreadyExist = document.querySelector('#quantity_error');
+      if (!validateQuantity(quantity.value)) {
+        hasErrorOnForm = true; 
+        quantity.classList.add('text-control--red');
+        if (!errorOnQuantityAlreadyExist) {
+          const errorMessage = createErrorElement(quantity.id, "Veuillez saisir une valeur numérique");
+          const containerInputQuantity = document.querySelector('#quantity');
+          containerInputQuantity.parentElement.appendChild(errorMessage);
+        }
+      }
+      
+      else {
+       
+        if(errorOnQuantityAlreadyExist) {
+          errorOnQuantityAlreadyExist.remove();
+        }
+        
+        quantity.classList.remove('text-control--red');
+      }
+    
 
-//vérification de la sélection d'un bouton radio 
+    const errorOnBirthdateAlreadyExist = document.querySelector('#birthdate_error')
+    if (birthdate.value === '') {
+      hasErrorOnForm = true;
+      birthdate.classList.add('text-control--red');
+      if (!errorOnBirthdateAlreadyExist) {
+        const errorMessage = createErrorElement(birthdate.id, "Vous devez entrer votre date de naissance.");
+        const containerInputBirthdate = document.querySelector('#birthdate');
+        containerInputBirthdate.parentElement.appendChild(errorMessage);
+      }
+    }
+    else {
+      if(errorOnBirthdateAlreadyExist) {
+        errorOnBirthdateAlreadyExist.remove();
+      }
+      
+      birthdate.classList.remove('text-control--red');
+    }
+    
 
-for (let i = 0; i < radioButtons.length; i++){
-  if (radioButtons[i].checked){
-    console.log("un bouton radio a été sélectionné")
-    break
+  let countOptionChecked = 0;
+  for (let i = 0; i < location.length; i++){
+    
+    if (location[i].checked){
+      countOptionChecked++;
+    }
   }
-}
-
-
-//vérification de la sélection du checkbox conditions générales
-
-function isConditionsChecked (conditionsCheckbox){
-  if(!conditionsCheckbox.checked){
-    alert('Veuillez accepter les conditions d\'utilisation');
-    console.log('Veuillez accepter les conditions d\'utilisation');
+  
+  const errorRadioButtonAlreadyExist = document.querySelector('#location_error')
+  if (countOptionChecked === 0){
+    hasErrorOnForm = true;
+    if (!errorRadioButtonAlreadyExist) {
+      const errorMessage = createErrorElement('location', "Vous devez choisir une option.");
+      const containerInputCheckbox = document.querySelector('#location1')
+      containerInputCheckbox.parentElement.appendChild(errorMessage);
+    } 
+  }else {
+    if(errorRadioButtonAlreadyExist) {
+      errorRadioButtonAlreadyExist.remove();
+    }
+      
+    
   }
-  else {
-    console.log('conditions d\'utilisation accepté');
+    
+  const errorRequiredButtonAlreadyExist = document.querySelector('#checkbox1_error')
+  if (!checkbox1.checked) {
+    hasErrorOnForm = true;
+    if (!errorRequiredButtonAlreadyExist) {
+      const errorMessage = createErrorElement('checkbox1', "Vous devez vérifier que vous acceptez les termes et conditions.");
+      const containerInputRequiredCheckbox = document.querySelector('#checkbox1');
+      containerInputRequiredCheckbox.parentElement.appendChild(errorMessage);
+    }
+  }else {
+    
+    if(errorRequiredButtonAlreadyExist) {
+      errorRequiredButtonAlreadyExist.remove();
+    }
   }
-}
 
-// empêcher l'effacement des données quand la validation ne se fait pas 
-loginForm.onsubmit = () => {
 
-}
 
-//définition de l'ajout de messages de validation ou d'erreur
-borderBox.addEventListener("input", function() {
-  borderBox.style.borderColor = "green";
-  errorMessage.style.display = "none";
+
+
+
+  if (!hasErrorOnForm) {
+    event.target.elements.remove;
+  }
+    
+
 });
 
-borderBox.addEventListener("invalid", function() {
-  borderBox.style.borderColor = "solid red 1px";
-  errorMessage.style.display = "block";
-  borderBox.innerText = "lopum ispum je sais plus";
-});
+const lengthValidator = (string, length) => {
+  return string.length > length;
+}
+
+const createErrorElement = (id, errorMessage) => { 
+  const pElement = document.createElement("p");
+  pElement.setAttribute("id",id + "_error");
+  pElement.innerText = errorMessage;
+  pElement.classList.add('red-text');
+
+  return pElement;
+}
+
+//formData.insertAfter (pElement)
+
+
+
+
+//fonction pour vérification de la saisie d'une valeur numérique
+
+ 
+    const validateQuantity = (quantity) => {
+      return parseInt(quantity) >= 0;
+    }
+
+    
+  
+  //vérification de la sélection d'un bouton radio 
+ 
+  
+  
+ 
+  
+const submitButton = document.querySelector(".btn-submit");
+  //le formulaire est validée 
+  function validForm() {
+    if(hasErrorOnForm = false) {
+      form.style.display = "none";
+      const confirmMessage = document.createElement("p");
+      confirmMessage.innerText('Merci pour votre participation');
+      const closeModalAfterConfirm = document.createElement("button");
+      closeModalAfterConfirm.innerText('Fermer');
+      closeModalAfterConfirm.classList.add('.btn-submit');
+    }
+  }
+
+
+closeModal.addEventListener("click", validForm);
