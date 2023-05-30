@@ -50,6 +50,11 @@ closeModal.addEventListener("click", closeModalWindow)
 
 function closeModalWindow() {
   modalbg.style.display = "none";
+  const confirmCloseModal = document.querySelector('.container-confirmation');
+  if(confirmCloseModal){
+    confirmCloseModal.remove();
+    loginForm.style.display = "block"
+  }
 }
 
  
@@ -210,10 +215,26 @@ loginForm.addEventListener('submit', (event)=> {
 
 
 
-  if (!hasErrorOnForm) {
-    event.target.elements.remove;
-  }
+  if(!hasErrorOnForm) {
     
+    loginForm.style.display = "none";
+    const divConfirm = document.createElement("div");
+    divConfirm.classList.add('container-confirmation');
+    const confirmMessage = document.createElement("p");
+    confirmMessage.innerText = 'Merci pour votre participation';
+    const closeModalAfterConfirm = document.createElement("button");
+    closeModalAfterConfirm.innerText = 'Fermer';
+    closeModalAfterConfirm.classList.add('btn-submit');
+    closeModalAfterConfirm.addEventListener("click", closeModalWindow)
+    const modalBody = document.querySelector('.modal-body');
+    divConfirm.appendChild(confirmMessage);
+    divConfirm.appendChild(closeModalAfterConfirm);
+    modalBody.appendChild(divConfirm);
+    loginForm.reset();
+  }
+
+  
+
 
 });
 
@@ -264,4 +285,4 @@ const submitButton = document.querySelector(".btn-submit");
   }
 
 
-closeModal.addEventListener("click", validForm);
+submitButton.addEventListener("click", validForm);
