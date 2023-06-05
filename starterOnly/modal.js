@@ -273,7 +273,7 @@ const createErrorElement = (id, errorMessage) => {
   
 const submitButton = document.querySelector(".btn-submit");
   //le formulaire est validée 
-  function validForm() {
+  /*function validForm() {
     if(hasErrorOnForm = false) {
       form.style.display = "none";
       const confirmMessage = document.createElement("p");
@@ -285,4 +285,4 @@ const submitButton = document.querySelector(".btn-submit");
   }
 
 
-submitButton.addEventListener("click", validForm);
+submitButton.addEventListener("click", validForm);*/
