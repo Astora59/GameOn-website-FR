@@ -1,0 +1,123 @@
+//vérifier valeur numérique DANS l'évent 
+if (quantity.value === undefined && isNaN(quantity.value)) {
+  console.log(quantity.value);
+  hasErrorOnForm = true; 
+  quantity.classList.add('text-control--red');
+  if (!errorOnQuantityAlreadyExist) {
+    const errorMessage = createErrorElement(quantity.id, "Veuillez saisir une valeur numérique");
+    const containerInputQuantity = document.querySelector('#quantity');
+    containerInputQuantity.parentElement.appendChild(errorMessage);
+  }
+}
+
+else {
+  if(errorOnQuantityAlreadyExist) {
+    errorOnQuantityAlreadyExist.remove();
+  }
+  hasErrorOnForm = false;
+  quantity.classList.remove('text-control--red');
+  //console.log('la valeur renvoyée est bien un nombre');
+}
+
+
+//vérifier valeur numérique en dehors de l'event
+const errorOnQuantityAlreadyExist = document.querySelector('#quantity_error');
+  function validateQuantity (quantity) {
+    if (quantity.value == null && isNaN(quantity.value)) {
+      console.log('erreur');
+      hasErrorOnForm = true; 
+      quantity.classList.add('text-control--red');
+      if (!errorOnQuantityAlreadyExist) {
+        const errorMessage = createErrorElement(quantity.id, "Veuillez saisir une valeur numérique");
+        const containerInputQuantity = document.querySelector('#quantity');
+        containerInputQuantity.parentElement.appendChild(errorMessage);
+      }
+    }
+    else {
+      if(errorOnQuantityAlreadyExist) {
+        errorOnQuantityAlreadyExist.remove();
+      }
+      hasErrorOnForm = false;
+      quantity.classList.remove('text-control--red');
+    }
+    
+    
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (!validateQuantity(quantity.value)) {
+      hasErrorOnForm = true; 
+      quantity.classList.add('text-control--red');
+      if (!errorOnQuantityAlreadyExist) {
+        //const errorMessage = createErrorElement(quantity.id, "Veuillez saisir une valeur numérique");
+        //const containerInputQuantity = document.querySelector('#quantity');
+        //containerInputQuantity.parentElement.appendChild(errorMessage);
+      }
+    }
+    
+    else {
+      if(errorOnQuantityAlreadyExist) {
+        errorOnQuantityAlreadyExist.remove();
+      }
+      hasErrorOnForm = false;
+      quantity.classList.remove('text-control--red');
+      //console.log('la valeur renvoyée est bien un nombre');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const errorOnQuantityAlreadyExist = document.querySelector('#quantity_error');
+  function validateQuantity (quantity) {
+    if (quantity.value == null && isNaN(quantity.value)) {
+      console.log('erreur');
+      hasErrorOnForm = true; 
+      //quantity.classList.add('text-control--red');
+      if (!errorOnQuantityAlreadyExist) {
+        const errorMessage = createErrorElement(quantity.id, "Veuillez saisir une valeur numérique");
+        const containerInputQuantity = document.querySelector('#quantity');
+        containerInputQuantity.parentElement.appendChild(errorMessage);
+      }
+    }
+    else {
+      if(errorOnQuantityAlreadyExist) {
+        errorOnQuantityAlreadyExist.remove();
+      }
+      hasErrorOnForm = false;
+      quantity.classList.remove('text-control--red');
+    }
+    
+    
+    }
